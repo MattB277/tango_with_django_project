@@ -11,11 +11,14 @@
     <body>
         <h1>Rango Says...</h1>
         <div>
-            Hey there partner! <br />
-            <strong>{{boldmessage}}</strong> <br />
+            Here is the about page. <br />
+            <strong>{{yourname}}</strong> <br />
         </div>
         <div>
-            <a href="/rango/about">About</a> <br />
+            <img src="{{MEDIA_URL}}cat.jpg" alt="picture of a cat."/>
+        </div>
+        <div>
+            <a href="/rango/">Index</a> <br />
             <img src="{% static 'images/rangoPicture.jpg' %}" alt="Picture of rango" /> 
         </div>
     </body>
