@@ -2,9 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.
 def index(request):
-    html ="Go to the " + '<a href="/rango/about/">About</a>' + "view"
-    return HttpResponse(html)
+    context_dict = {'boldmessage': 'Crunchy, creamy, cookie, candy, cupcake!'}
+    # first parameter is the template we wish to use.
+    return render(request, 'rango/index.html', context=context_dict)
 
 def about(request):
-    html ="Go to the " + '<a href="/rango/">Index</a>' + "view"
+    html ="Go to the " + '<a href="/rango/">Index</a>' + " view"
     return HttpResponse(html)
