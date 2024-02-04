@@ -9,24 +9,23 @@
     </head>
 
     <body>
-        <h1>Rango Says...</h1>
         <div>
-            Hey there partner! <br />
-            <strong>{{boldmessage}}</strong> <br />
-        </div>
-        <div>
-            {% if categories %}
+            {% if category %}
+            <h1>{{category.name}}</h1>
+            {% if pages %}
             <ul>
-                {% for category in categories %}
+                {% for page in pages %}
                 <li>
-                {{category.name}}
-                {% endfor %}
+                    <a href="{{page.url}}">{{page.title}}</a>
                 </li>
+                {% endfor %}
             </ul>
             {% else %}
-            <strong>There are no categories present.</strong>
+            <strong>There are pages currently in category.</strong>
             {% endif %}
-
+            { else %}
+                The Specified category does not exist.
+            {%endif%}
         </div>
 
         <div>
