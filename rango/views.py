@@ -12,6 +12,11 @@ def index(request):
     cat_list = Category.objects.order_by('-likes')[:5]
     context_dict = {'boldmessage': 'Crunchy, creamy, cookie, candy, cupcake!'}
     context_dict['categories'] = cat_list
+
+    # add in list of top 5 pages
+    page_list = Page.objects.order_by('-views')[:5]
+    context_dict['pages']=page_list
+    
     # first parameter is the template we wish to use.
     return render(request, 'rango/index.html', context=context_dict)
 
