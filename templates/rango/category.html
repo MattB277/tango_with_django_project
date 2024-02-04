@@ -29,6 +29,11 @@
         </div>
 
         <div>
+            {% if category %}
+            <a hred="/rango/category/{{category_slug}}/add_page/">Add Page</a> <br/>
+            {%else%}
+            The Specified category does not exist.
+            {%endif%}
             <a href="/rango/about">About</a> <br />
             <img src="{% static 'images/rangoPicture.jpg' %}" alt="Picture of rango" /> 
         </div>
