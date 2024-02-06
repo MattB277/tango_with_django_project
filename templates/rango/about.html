@@ -1,25 +1,16 @@
-<!DOCTYPE html>
-
+{% extends 'rango/base.html' %}
 {% load staticfiles %}
 
-<html>
+{% block title_block %}
+    About Rango
+{% endblock %}
 
-    <head>
-        <title>Rango</title>
-    </head>
-
-    <body>
-        <h1>Rango Says...</h1>
-        <div>
-            Here is the about page. <br />
-            <strong>{{yourname}}</strong> <br />
-        </div>
-        <div>
-            <img src="{{MEDIA_URL}}cat.jpg" alt="picture of a cat."/>
-        </div>
-        <div>
-            <a href="/rango/">Index</a> <br />
-            <img src="{% static 'images/rangoPicture.jpg' %}" alt="Picture of rango" /> 
-        </div>
-    </body>
-</html>
+{% block body_block %}
+<h1>Rango says...</h1>
+<div>
+    here is the about page. <br />
+    This site has been put together by Matthew Ballantyne, using David Maxwell's tutorial.<br />
+</div>
+<img src="{% static 'images/rango.jpg' %}" alt="Picture of Rango" />
+<img src="{{ MEDIA_URL }}cat.jpg" alt="Picture of a Cat" />
+{% endblock %}
