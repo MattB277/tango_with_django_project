@@ -88,6 +88,8 @@ DATABASES = {
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
+# User Authentication
+LOGIN_URL = 'rango:login'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
