@@ -6,7 +6,6 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-
 # Create your views here.
 def index(request):
     # query database for all categories stored
@@ -21,11 +20,18 @@ def index(request):
     page_list = Page.objects.order_by('-views')[:5]
     context_dict['pages']=page_list
 
+    # cookies
+    request.session.set_test_cookie()
     # first parameter is the template we wish to use.
     return render(request, 'rango/index.html', context=context_dict)
 
 def about(request):
     context_dict = {'yourname': 'Matthew Ballantyne',}
+    # cookie testing
+    if request.session.test_cookie_worked():
+        print("TEST COOKIE WORKED!")
+        request.session.delete_test_cookie()
+
     return render(request, 'rango/about.html', context=context_dict)
 
 def show_category(request, category_name_slug):
