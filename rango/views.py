@@ -9,31 +9,26 @@ from datetime import datetime
 
 # Create your views here.
 def index(request):
-    # query database for all categories stored
-    # Order by likes desc.
-    # Take top 5 /  all if < 5 records
-    # Place list in context_dict to be passed to template
-    cat_list = Category.objects.order_by('-likes')[:5]
     context_dict = {'boldmessage': 'Crunchy, creamy, cookie, candy, cupcake!'}
+
+    # get top 5 categories categories 
+    cat_list = Category.objects.order_by('-likes')[:5]
     context_dict['categories'] = cat_list
 
     # add in list of top 5 pages
     page_list = Page.objects.order_by('-views')[:5]
     context_dict['pages']=page_list
 
+    visitor_cookie_handler(request)
+
     response = render(request, 'rango/index.html', context= context_dict)
     # cookies
-    visitor_cookie_handler(request, response)
-    
     return response
 
 def about(request):
-    context_dict = {'yourname': 'Matthew Ballantyne',}
-    # cookie testing
-    if request.session.test_cookie_worked():
-        print("TEST COOKIE WORKED!")
-        request.session.delete_test_cookie()
-
+    context_dict = {}
+    visitor_cookie_handler(request)
+    context_dict['visits'] = request.session['visits']
     return render(request, 'rango/about.html', context=context_dict)
 
 def show_category(request, category_name_slug):
@@ -174,23 +169,23 @@ def user_logout(request):
     # Take the user back to the homepage.
     return redirect(reverse('rango:index'))
 
-def visitor_cookie_handler(request, response):
-    # Get the number of visits to the site.
-    # We use the COOKIES.get() function to obtain the visits cookie.
-    # If the cookie exists, the value returned is casted to an integer.
-    # If the cookie doesn't exist, then the default value of 1 is used.
-    visits = int(request.COOKIES.get('visits', '1'))
-    last_visit_cookie = request.COOKIES.get('last_visit', str(datetime.now()))
-    last_visit_time = datetime.strptime(last_visit_cookie[:-7],
-    '%Y-%m-%d %H:%M:%S')
-    # If it's been more than a day since the last visit...
+# A helper method
+def get_server_side_cookie(request, cookie, default_val=None):
+    val = request.session.get(cookie)
+    if not val:
+        val = default_val
+    return val
+
+def visitor_cookie_handler(request):
+    visits = int(get_server_side_cookie(request, 'visits', '1'))
+    last_visit_cookie = get_server_side_cookie(request, 'last_visit', str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7], '%Y-%m-%d %H:%M:%S')
+
+    # only allow one visit per day
     if (datetime.now() - last_visit_time).days > 0:
         visits = visits + 1
-    # Update the last visit cookie now that we have updated the count
-        response.set_cookie('last_visit', str(datetime.now()))
+        request.session['last_visit'] = str(datetime.now())
     else:
-        # Set the last visit cookie
-        response.set_cookie('last_visit', last_visit_cookie)
+        request.session['last_visit'] = last_visit_cookie
     
-    # Update/set the visits cookie
-    response.set_cookie('visits', visits)
+    request.session['visits'] = visits
